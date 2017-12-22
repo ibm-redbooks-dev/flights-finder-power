@@ -84,12 +84,12 @@ module.exports = function() {
     });
   }
 
-  var validateInputs = function(location, time) {
-    console.log('validateInputs', location, time);
-    if (!location || !time) {
+  var validateInputs = function(searchtext, time) {
+    console.log('validateInputs', searchtext, time);
+    if (!searchtext || !time) {
       return buildResp({
         'status': 406,
-        'error': 'Error: Invalid input location and/or input date'
+        'error': 'Error: Invalid input searchtext and/or input date'
       });
     }
 
@@ -158,10 +158,10 @@ module.exports = function() {
     });
   };
 
-  var langAnalyze = function(location) {
-    console.log('langAnalyze', location);
+  var langAnalyze = function(searchtext) {
+    console.log('langAnalyze', searchtext);
     var parameters = Object.assign({}, paramsTmplt, {
-      'text': location
+      'text': searchtext
     });
     console.log('langAnalyze', parameters);
     var def = Q.defer();
@@ -212,14 +212,14 @@ module.exports = function() {
     return def.promise;
   };
 
-  var perform = function(location, time) {
-    var vali = validateInputs(location, time);
+  var perform = function(searchtext, time) {
+    var vali = validateInputs(searchtext, time);
     if (vali) {
       return Q.fcall(function() {
         return vali;
       });
     }
-    return langAnalyze(location).then(function(resp) {
+    return langAnalyze(searchtext).then(function(resp) {
       if (resp.entities.length !== 2) {
         return buildResp({
           'status': 400,

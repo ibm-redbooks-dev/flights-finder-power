@@ -19,8 +19,8 @@ var express = require('express');
 var WatsonDiscovery = require('../common/watson')();
 var router = express.Router();
 
-var _query = function(location, date, res) {
-    WatsonDiscovery.query(location, date).then(function(resp){
+var _query = function(searchtext, date, res) {
+    WatsonDiscovery.query(searchtext, date).then(function(resp){
   	  res.json(resp);
     }, function(err){
     	console.log('err', err)
@@ -28,18 +28,18 @@ var _query = function(location, date, res) {
     });
 };
 /* GET users listing. */
-router.get('/:location/:date', function(req, res, next) {
-  var input = req.params.location || 'Flight from Houston to Chicago';
+router.get('/:searchtext/:date', function(req, res, next) {
+  var input = req.params.searchtext || 'Flight from Houston to Chicago';
   var date = new Date(req.params.date || '2017-12-20');
   _query(input, date, res);
 });
 router.get('/', function(req, res, next) {
-  var input = req.query.location || 'Flight from Houston to Chicago';
+  var input = req.query.searchtext || 'Flight from Houston to Chicago';
   var date = new Date(req.query.date || '2017-12-20');
   _query(input, date, res);
 });
 router.post('/', function(req, res, next) {
-    var input = req.body.location || 'Flight from Houston to Chicago';
+    var input = req.body.searchtext || 'Flight from Houston to Chicago';
     var date = new Date(req.body.date || '2017-12-20');
     _query(input, date, res);
 });
